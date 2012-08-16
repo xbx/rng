@@ -6,11 +6,7 @@ RNG means Rng is Not Graphical
 Overview
 --------
 
-<<<<<<< HEAD
 RNG will provide a natural language as interface of common daily tasks. For instance, saving notes, passwords, and more complex tasks such as accessing web based calendar and putting reminders there.
-=======
-RNG will provide a natural language as interface of common daily tasks. For instance, saving notes, passwords, and more complex task such as accessing web based calendar and putting reminders there.
->>>>>>> 9f3ad7e743bd3c8c69e8015794451224ea27d462
 We will offer a console-like interface.
 
 Motivation
@@ -53,6 +49,11 @@ $ in calendar get next events
 
 * And a big etcetera
 
+Plugins architecture
+--------------------
+
+RNG will be compounded by plugins. In previous examples, they should be: Calendar Plugin, Passwords Plugin, Notes Plugins.
+People could write their own plugins thanks to an uniform and extensible interface.
 
 *Work in progress*
 
