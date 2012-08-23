@@ -4,37 +4,33 @@
 __author__ = "xbx"
 __date__ = "$Aug 16, 2012 4:41:48 PM$"
 
-from plex import *
+import re
 
+class RngInvalidCommandException(Exception):
+    pass
+
+class RngLexic(object):
+    plugin = None
+    action = None
+
+    def __init__(self, *initial_data, **kwargs):
+        for dictionary in initial_data:
+            for key in dictionary:
+                setattr(self, key, dictionary[key])
+        for key in kwargs:
+            setattr(self, key, kwargs[key])
 
 class RngLexicAnalyzer(object):
-
-    space = Any(" \t\n")
-
-    def some(self, text):
-        return "some", text
-
-    lexicon = Lexicon([
-        (Str('in '), Begin('set_plugin_name')),
-        (Str('on '), some),
-        State('set_plugin_name', [
-            (Rep1(Range("azAZ")), 'plugin'),
-            (space, Begin(''))
-        ]),
-        State('set_plugin_action', [
-            (Rep1(Range("azAZ")), 'plugin_action')
-        ])
-    ])
 
     def __init__(self):
         pass
 
-    def analyze(self, stream):
-        scanner = Scanner(self.lexicon, stream)
-        try:
-            result = scanner.read()
-        except errors.UnrecognizedInput:
-            return None
-        return result
+    def analyze(self, text):
+        lexic = re.match(r"(?P<command>\w+) (?P<plugin>\w+)( (?P<action>.+))?", text)
+        if lexic == None:
+            raise RngInvalidCommandException
+
+        return RngLexic(lexic.groupdict())
+    
 
 
