@@ -1,19 +1,15 @@
-#! /usr/bin/python
+__author__ = "xbx"
+__date__ = "$Aug 16, 2012 1:27:45 PM$"
 
-__author__="xbx"
-__date__ ="$Aug 16, 2012 1:27:45 PM$"
+from RngCommander import RngCommander
 
-import code
-import sys
-from RngCommander import *
-import readline
 
-class RngInteractiveTool():
+class RngInteractiveTool(object):
     """ Interact with the user prompting for commands. """
 
     def __init__(self):
         commander = RngCommander()
-        commander.cmdloop()
+        commander.cmdloop("welcome")
 
 if __name__ == "__main__":
     RngInteractiveTool()
