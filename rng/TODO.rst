@@ -11,3 +11,5 @@ TODO List
 * Enhance documentation
 
 * Test arch and use cases
+
+* Persistent history
