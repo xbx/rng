@@ -8,8 +8,7 @@ class RngInteractiveTool(object):
     """ Interact with the user prompting for commands. """
 
     def __init__(self):
-        commander = RngCommander()
-        commander.cmdloop("welcome")
+        self.commander = RngCommander()
 
-if __name__ == "__main__":
-    RngInteractiveTool()
+    def run(self):
+        self.commander.cmdloop()

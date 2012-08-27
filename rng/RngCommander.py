@@ -3,15 +3,11 @@ __date__ = "$Aug 16, 2012 3:54:11 PM$"
 
 from analyzer.RngLexicAnalyzer import RngLexicAnalyzer
 from analyzer.RngLexicAnalyzer import RngInvalidCommandException
-import cmd
+import os
 import sys
+import cmd2 as cmd
 import importlib
-
-plugins = [
-    'plug1',
-    'plug2',
-    'plug3',
-]
+import pkgutil
 
 
 class RngCommander(cmd.Cmd):
@@ -25,6 +21,7 @@ class RngCommander(cmd.Cmd):
         self.analizer = RngLexicAnalyzer()
 
     def complete_in(self, text, line, start_index, end_index):
+        plugins = [name for _, name, _ in pkgutil.iter_modules(['plugin'])]
         if text:
             return [
                 plugin for plugin in plugins
@@ -69,7 +66,6 @@ class RngCommander(cmd.Cmd):
 
     def do_shell(self, line):
         """ Execute command in terminal """
-        import os
         os.system(line)
 
     def do_in(self, line):
