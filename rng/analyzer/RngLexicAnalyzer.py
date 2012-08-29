@@ -30,7 +30,6 @@ class RngLexicAnalyzer(object):
                    " (?P<plugin>\w+)",
                    "( (?P<action>\w+)( (?P<parameters>.+))?)?"
                    ]
-        pass
 
     def analyze(self, text):
 
