@@ -1,3 +1,4 @@
 cmd2==0.6.4
+pymongo==2.2.1
 pyparsing==1.5.6
 wsgiref==0.1.2
