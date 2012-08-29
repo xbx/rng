@@ -26,12 +26,15 @@ class RngLexic(object):
 class RngLexicAnalyzer(object):
 
     def __init__(self):
+        self.lexical = ["(?P<command>\w+)",
+                   " (?P<plugin>\w+)",
+                   "( (?P<action>\w+)( (?P<parameters>.+))?)?"
+                   ]
         pass
 
     def analyze(self, text):
-        lexic = re.match(r"(?P<command>\w+) (?P<plugin>\w+)( (?P<action>.+))?",
-                         text)
+
+        lexic = re.match("".join(self.lexical), text)
         if lexic == None:
             raise RngInvalidCommandException
-
         return RngLexic(lexic.groupdict())
