@@ -29,4 +29,4 @@ Done list
 
 * Plugin notes (basic)
 
-* Database layer (NoSQL, maybe MongoDB)
+* Database layer (MongoDB)
