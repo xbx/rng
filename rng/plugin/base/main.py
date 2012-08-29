@@ -3,6 +3,7 @@ Created on Aug 23, 2012
 
 @author: xbx
 """
+from db.handler import RngDbHandler
 
 
 class BasePlugin(object):
@@ -17,8 +18,9 @@ class BasePlugin(object):
         """
         Constructor
         """
+        self.db = RngDbHandler(self.__class__.__name__)
 
-    def task(self, action):
+    def task(self, action, parameters=None):
         """ Routes the task (action) to the proper method
 
         """
@@ -30,7 +32,7 @@ class BasePlugin(object):
         except AttributeError:
             return self.ERROR_INVALID_ACTION
 
-        return task_method()
+        return task_method(parameters)
 
     def task_default(self):
         """ To be performed on empty actions
@@ -40,5 +42,16 @@ class BasePlugin(object):
         """
         return self.SUCCESS_ACTION
 
+    def task_help(self, parameters):
+        """ To be performed on empty actions
+
+         If this method is not overridden, it does nothing.
+
+        """
+        print "No help"
+
     def _input(self, prompt=""):
         return raw_input(prompt)
+
+    def _get_tasks(self):
+        return [task for task in dir(self) if task.startswith('task_')]
