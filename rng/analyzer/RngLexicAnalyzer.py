@@ -12,9 +12,11 @@ class RngInvalidCommandException(Exception):
 
 
 class RngLexic(object):
+    command = None
     plugin = None
     action = None
-
+    parameters = None
+    
     def __init__(self, *initial_data, **kwargs):
         for dictionary in initial_data:
             for key in dictionary:
