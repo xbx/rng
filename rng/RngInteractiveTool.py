@@ -1,7 +1,7 @@
 __author__ = "xbx"
 __date__ = "$Aug 16, 2012 1:27:45 PM$"
 
-from RngCommander import RngCommander
+from commander import RngCommander
 
 
 class RngInteractiveTool(object):

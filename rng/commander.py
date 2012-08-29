@@ -4,24 +4,23 @@ __date__ = "$Aug 16, 2012 3:54:11 PM$"
 from analyzer.RngLexicAnalyzer import RngLexicAnalyzer
 from analyzer.RngLexicAnalyzer import RngInvalidCommandException
 import os
-import sys
 import cmd2 as cmd
 import importlib
 import pkgutil
+import logging
 
 
 class RngCommander(cmd.Cmd):
     """ Route command to proper module/plugin """
-    current_plugin = None
-    analyzer = RngLexicAnalyzer()
-    prompt = "> "
 
     def __init__(self):
         cmd.Cmd.__init__(self)
-        self.analizer = RngLexicAnalyzer()
+        self.analyzer = RngLexicAnalyzer()
+        self.current_plugin = None
+        self.prompt = "> "
 
     def complete_in(self, text, line, start_index, end_index):
-        plugins = [name for _, name, _ in pkgutil.iter_modules(['plugin'])]
+        plugins = [name for _, name, _ in pkgutil.iter_modules(['rng/plugin'])]
         if text:
             return [
                 plugin for plugin in plugins
@@ -49,20 +48,16 @@ class RngCommander(cmd.Cmd):
     """
         Commands methods. A command "foo" is routed to do_foo()
     """
-
-    def do_exit(self, line):
-        """ Exits current plugin otherwise exits application """
-        if self.current_plugin is not None:
-            self.current_plugin = None
-            self.prompt = "> "
+    def do_help(self, line):
+        if self.current_plugin is None:
+            cmd.Cmd.do_help(self, line)
         else:
-            sys.exit(0)
+            self.default('help')
 
     def do_use(self, line):
         """ Select a plugin as default """
         lexic = self._parse_line(line, 'use')
-        self.current_plugin = lexic.plugin
-        self.prompt = "(%s)> " % self.current_plugin
+        self._set_current_plugin(lexic.plugin)
 
     def do_shell(self, line):
         """ Execute command in terminal """
@@ -72,16 +67,6 @@ class RngCommander(cmd.Cmd):
         """ Nice command """
         lexic = self._parse_line(line, 'in')
         self._perform(lexic)
-
-    def _perform(self, lexic):
-        """ Import needed module and executes the task """
-        try:
-            module_name = "plugin.%s.main" % (lexic.plugin)
-            module = importlib.import_module(module_name)
-        except:
-            raise Exception()
-        if module.plugin_instance.task(lexic.action):
-            self._invalid_command()
 
     def _parse_line(self, line, command=None):
         """ Returns the line parsed with lexical analysis """
@@ -94,6 +79,24 @@ class RngCommander(cmd.Cmd):
 
         return lexic
 
+    def _perform(self, lexic):
+        """ Import needed module and executes the task """
+        try:
+            module_name = "plugin.%s.main" % (lexic.plugin)
+            module = importlib.import_module(module_name)
+        except Exception as e:
+            logging.error("Unable to perform command: %s", e.message)
+            raise Exception()
+        if module.plugin_instance.task(lexic.action, lexic.parameters):
+            self._invalid_command()
+
     def _invalid_command(self, line=None):
         print "Invalid command"
         return False
+
+    def _set_current_plugin(self, plugin):
+        self.current_plugin = plugin
+        if(not plugin):
+            self.prompt = "> "
+        else:
+            self.prompt = "(%s)> " % self.current_plugin
