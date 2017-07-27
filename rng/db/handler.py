@@ -6,12 +6,12 @@ Created on Aug 27, 2012
 from pymongo import Connection
 from bson import InvalidDocument
 import logging
-
+import os
 
 class RngDbHandler(object):
     """ Database access handler """
 
-    def __init__(self, collection, db='rng', host='localhost',
+    def __init__(self, collection, db='rng', host=os.getenv('MONGO_HOST', 'localohst'),
                  port=None):
         """ Init log handler and store the collection handle """
 
